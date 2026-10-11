@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sqlalchemy>=2
+psycopg[binary]
+pyjwt
+pydantic>=2
+reportlab
+google-auth
+requests
+pytest
+httpx
