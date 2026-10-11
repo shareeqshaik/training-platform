@@ -1,0 +1,56 @@
+:root { font-family: "Segoe UI", system-ui, sans-serif; color: #e5e7eb; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: #0b0b0b; padding: 32px 16px; }
+#root { max-width: 1000px; margin: 0 auto; }
+
+/* faint green symbol pattern (delete this whole block for a plain black page) */
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .22;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg fill='%232f8d46' font-family='Segoe%20UI%20Symbol,Arial,sans-serif' font-size='30'%3E%3Ctext x='20' y='50' transform='rotate(-12 20 50)'%3E%26lt;/%26gt;%3C/text%3E%3Ctext x='150' y='70' transform='rotate(10 150 70)'%3E%7B%7D%3C/text%3E%3Ctext x='80' y='140' transform='rotate(-8 80 140)'%3E%E2%9C%94%3C/text%3E%3Ctext x='185' y='175' transform='rotate(14 185 175)'%3E%E2%98%85%3C/text%3E%3Ctext x='20' y='215' transform='rotate(8 20 215)'%3E%23%3C/text%3E%3Ctext x='125' y='225' transform='rotate(-10 125 225)'%3E%3B%3C/text%3E%3C/g%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+/* main card and login card */
+#root > div, #root > form { background: #161616; border: 1px solid #2a2a2a; border-radius: 14px; padding: 28px; box-shadow: 0 10px 40px rgba(0, 0, 0, .7); }
+#root > form { max-width: 380px; margin: 8vh auto 0; text-align: center; }
+#root > form input { display: block; width: 100%; margin: 12px 0; }
+#root > form button { width: 100%; margin-top: 8px; }
+
+h1, h2, h3 { color: #ffffff; }
+h1 { margin: 0 0 8px; }
+h2 { border-bottom: 2px solid #2f8d46; padding-bottom: 6px; margin-top: 28px; }
+h3 { margin: 22px 0 8px; }
+
+/* admin panel (has an inline border, so we override it) */
+#root div[style*="border"] { background: #101010; border: 1px solid #2f8d46 !important; border-radius: 12px; padding: 20px !important; }
+
+input, select, textarea { font: inherit; color: #f3f4f6; background: #0f0f0f; padding: 9px 12px; border: 1px solid #333; border-radius: 8px; margin: 3px 0; }
+input::placeholder, textarea::placeholder { color: #6b7280; }
+option { background: #161616; color: #e5e7eb; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: #2f8d46; box-shadow: 0 0 0 3px rgba(47, 141, 70, .35); }
+textarea { width: 100%; }
+input[type="radio"], input[type="checkbox"] { margin-right: 8px; accent-color: #2f8d46; }
+
+button { font: inherit; font-weight: 700; cursor: pointer; background: #2f8d46; color: #fff; border: none; border-radius: 8px; padding: 9px 18px; transition: background .15s, transform .1s; }
+button:hover { background: #3aa655; }
+button:active { transform: scale(.97); }
+button:disabled { background: #374151; color: #9ca3af; cursor: not-allowed; }
+
+table { width: 100%; border-collapse: collapse !important; background: #121212; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+th { background: #2f8d46; color: #fff; text-align: left; padding: 10px; }
+td { padding: 10px; border-bottom: 1px solid #262626; color: #e5e7eb; }
+tr:nth-child(even) td { background: #181818; }
+table, th, td { border-color: #262626 !important; }
+
+ul { padding-left: 0; list-style: none; }
+li { background: #1a1a1a; border: 1px solid #2a2a2a; border-left: 4px solid #2f8d46; border-radius: 10px; padding: 10px 14px; margin: 8px 0; }
+
+fieldset { border: 1px solid #2f8d46; border-radius: 12px; margin: 14px 0; padding: 14px 18px; background: #121212; }
+legend { font-weight: 700; color: #fff; padding: 0 8px; }
+fieldset label { display: block; padding: 6px 0; cursor: pointer; }
+
+p[role="alert"] { background: #3b1111; color: #fca5a5 !important; border-left: 4px solid #ef4444; padding: 10px 14px; border-radius: 8px; }
+p[style*="green"] { background: #0f2a18; color: #86efac !important; border-left: 4px solid #22c55e; padding: 10px 14px; border-radius: 8px; }
+code { background: #1f2937; color: #86efac; padding: 2px 6px; border-radius: 4px; }
+small { color: #9ca3af; }
+video { max-width: 100%; border-radius: 12px; }

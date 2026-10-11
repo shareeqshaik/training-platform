@@ -1,0 +1,13 @@
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+backend/local_settings.py
+backend/emails.log
+backend/training.db
+.env
+frontend/node_modules/
+frontend/dist/
+Thumbs.db
+node_modules/
+node_modules/
