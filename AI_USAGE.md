@@ -6,33 +6,32 @@ This document discloses how AI tools were used on this project, as required by t
 
 | Tool | Used for |
 |------|----------|
-| Claude | scaffolding the FastAPI backend and React frontend, debugging, code review, README and documentation_ |
-| Prompt Cowboy |  improving and structuring prompts before sending them to Claude_ |
-
-List only tools you actually used.
+| Claude | Backend API and database, frontend UI, certificates, email notifications, Google sign-in, debugging, and documentation |
+| Prompt Cowboy | Improving and structuring my prompts before sending them to Claude |
 
 ## How AI was used
 
-Fill in one or two honest lines per area. Delete areas where you did not use AI.
-
-- **Planning and design:** _e.g. discussed the data model (users, courses, modules, quizzes, enrollments, attempts, certificates) and the rule that modules unlock one after another._
-- **Backend (FastAPI, SQLAlchemy):** _what AI generated and what you wrote or changed yourself._
-- **Frontend (React):** _same._
-- **Certificates (web page and PDF):** _same._
-- **Email notifications and Google sign-in:** _same._
-- **Debugging:** _example of a bug you hit and how you fixed it._
-- **Documentation:** _README, ER diagram, this file._
+- **Backend (FastAPI, SQLAlchemy, PostgreSQL):** Claude helped build the API routes, the data model (users, courses, modules, quizzes, questions, enrollments, attempts, certificates) and the business rules in `grade()`, `statuses()` and `issue_certificate()`. _Add one line on what you decided or wrote yourself._
+- **Frontend (React):** Claude helped build the admin and learner screens. _Add one line on what you decided or changed yourself._
+- **Certificates, emails and Google sign-in:** Claude helped with the certificate web page and PDF, the background email notifications, and Google single sign-on. _Add one line on what you decided or changed yourself._
+- **Debugging:** I pasted errors and unexpected behaviour into Claude and used its suggestions to find the cause. _Add one real example below._
+- **Documentation:** Claude helped draft the README, ER diagram, this file and the Declaration of Originality, which I reviewed and edited.
+- **Prompt Cowboy:** I used it to improve my prompts before sending them to Claude.
 
 ## What I reviewed and changed myself
 
-_Give two or three concrete examples where you read AI output and changed it: fixed a bug, rejected a suggestion, simplified code, added validation, changed a design decision and why._
+_Write two or three real examples, one or two sentences each. Good examples: a bug you found and how it was fixed, a Claude suggestion you rejected or simplified, a design decision you made and why (for example, requiring modules to be completed in order, or limiting quiz attempts)._
+
+1. _example 1_
+2. _example 2_
+3. _example 3_
 
 ## Prompt history
 
 | Tool | Link or file |
 |------|--------------|
 | Claude conversation(s) | _shared link, or the exported file in `docs/prompt-history/`_ |
-| Prompt Cowboy | _export, screenshots or the prompts it produced, saved in `docs/prompt-history/`_ |
+| Prompt Cowboy | _the improved prompts or screenshots, saved in `docs/prompt-history/`_ |
 
 ## Ownership
 
