@@ -151,8 +151,8 @@ The first account registered becomes the admin.
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | _add here_ | _add here_ |
-| Learner | _add here_ | _add here_ |
+| Admin | admin@x.com|secert1 |
+| Learner | rani@x.com| sumsum1 |
 
 ## Known limitations
 
