@@ -113,6 +113,14 @@ erDiagram
 
 **Prerequisites:** Python 3.10+, Node.js 18+, PostgreSQL 14+
 
+### Deploy to Render
+
+1. In the Render Dashboard, choose **New +** → **Blueprint** and connect this GitHub repository.
+2. Render reads `render.yaml` to build the React frontend, serve it and the API from one web service, and create a PostgreSQL database.
+3. After the deploy completes, open the `training-platform` service URL and register the first account; it becomes the admin.
+
+The Blueprint uses Render's free web-service and PostgreSQL plans. Free services can sleep when idle, and Render's free PostgreSQL database expires after its published free period; back up or upgrade the database before that if you need to keep user/course data. Set a custom `GOOGLE_CLIENT_ID` if you use Google sign-in.
+
 **1. Database**
 ```sql
 CREATE DATABASE training;

@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: training-platform
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt && cd frontend && npm ci && npm run build
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: NODE_VERSION
+        value: 22.22.2
+      - key: DATABASE_URL
+        fromDatabase:
+          name: training-platform-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+
+databases:
+  - name: training-platform-db
+    databaseName: training
+    user: training
+    plan: free

@@ -4,11 +4,13 @@ routes are thin. Modules unlock one after another via statuses(). Certificate nu
 so it is deterministic. Emails are sent as background tasks (notify.py). The first registered user becomes admin."""
 import os, io, random, hashlib, datetime as dt, jwt
 from datetime import date
+from pathlib import Path
 from typing import Optional
-from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks
+from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, Response
 from fastapi.security import HTTPBearer
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from sqlalchemy import (create_engine, event, func, Column, Integer, String, Boolean, Text, Date,
                         ForeignKey, DateTime, JSON, UniqueConstraint)
@@ -23,6 +25,10 @@ except ImportError:
 URL = os.getenv("DATABASE_URL") or _SAURL.create(
     "postgresql+psycopg", username="postgres", password=_DB_PASSWORD,
     host="localhost", port=5432, database="training").render_as_string(hide_password=False)
+if URL.startswith("postgres://"):
+    URL = URL.replace("postgres://", "postgresql+psycopg://", 1)
+elif URL.startswith("postgresql://"):
+    URL = URL.replace("postgresql://", "postgresql+psycopg://", 1)
 SECRET = os.getenv("JWT_SECRET", "dev-secret")
 kw = dict(connect_args={"check_same_thread": False}, poolclass=StaticPool) if URL.startswith("sqlite") else {}
 engine = create_engine(URL, **kw); Session = sessionmaker(engine); Base = declarative_base()
@@ -283,14 +289,15 @@ def submit(mid: int, b: Submit, bg: BackgroundTasks, u=Depends(user), db=Depends
                 f'Hello {u.name},\n\nYou scored {score}% on "{m.title}" (pass mark {s["quiz"].passing_score}%). Result: {verdict}.')
     return {"score": score, "passed": passed, "passing_score": s["quiz"].passing_score, "results": res}
 @app.post("/courses/{cid}/certificate")
-def certificate(cid: int, bg: BackgroundTasks, u=Depends(user), db=Depends(get_db)):
+def certificate(request: Request, cid: int, bg: BackgroundTasks, u=Depends(user), db=Depends(get_db)):
     e = my_enr(db, u, cid)
     had = db.query(Certificate).filter_by(enrollment_id=e.id).first() is not None
     c = issue_certificate(db, e)
     if not had:
+        pdf_url = str(request.url_for("cert_pdf", number=c.number))
         bg.add_task(send_email, u.email, "Your certificate is ready",
                     f"Hello {u.name},\n\nCongratulations! Your certificate number is {c.number} (final score {c.score}%).\n"
-                    f"Download it: http://localhost:8000/certificates/{c.number}/pdf")
+                    f"Download it: {pdf_url}")
     return {"number": c.number, "score": c.score}
 @app.get("/certificates/{number}", response_class=HTMLResponse)
 def view_cert(number: str, db=Depends(get_db)):  # public, verifiable; print to PDF from browser
@@ -395,3 +402,7 @@ def google_login(b: GoogleLogin, db=Depends(get_db)):
                  role="admin" if db.query(User).count() == 0 else "user")
         db.add(u); db.commit()
     return {"token": jwt.encode({"sub": str(u.id)}, SECRET, "HS256"), "role": u.role, "name": u.name}
+
+frontend_dist = Path(__file__).resolve().parents[1] / "frontend" / "dist"
+if frontend_dist.is_dir():
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")

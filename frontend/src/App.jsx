@@ -3,7 +3,7 @@ import QuizView from "./QuizView";
 import Admin from "./Admin";
 import CourseList from "./CourseList";
 import GoogleButton from "./GoogleButton";
-const API = "http://localhost:8000";
+const API = import.meta.env.VITE_API_URL || "";
 export default function App() {
   const [tok, setTok] = useState(null); const [courses, setCourses] = useState([]);
   const [prog, setProg] = useState(null); const [cid, setCid] = useState(null); const [mod, setMod] = useState(null);
