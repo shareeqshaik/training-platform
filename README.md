@@ -119,7 +119,9 @@ erDiagram
 2. Render reads `render.yaml` to build the React frontend, serve it and the API from one web service, and create a PostgreSQL database.
 3. After the deploy completes, open the `training-platform` service URL and register the first account; it becomes the admin.
 
-The Blueprint uses Render's free web-service and PostgreSQL plans. Free services can sleep when idle, and Render's free PostgreSQL database expires after its published free period; back up or upgrade the database before that if you need to keep user/course data. Set a custom `GOOGLE_CLIENT_ID` if you use Google sign-in.
+The Blueprint uses Render's free web-service and PostgreSQL plans. Free services can sleep when idle, and Render's free PostgreSQL database expires after its published free period; back up or upgrade the database before that if you need to keep user/course data.
+
+To enable Google sign-in on Render, set `GOOGLE_CLIENT_ID` on the web service and `VITE_GOOGLE_CLIENT_ID` in the service's build environment to the same Google OAuth web client ID, then redeploy. In Google Cloud Console, add the deployed Render service URL (for example, `https://your-service.onrender.com`) under **Authorized JavaScript origins** for that OAuth client. Google rejects sign-in from domains that are not listed there; the OAuth client owner must make this change.
 
 **1. Database**
 ```sql
@@ -137,7 +139,7 @@ Create `backend/local_settings.py` (git-ignored) with your PostgreSQL password:
 ```python
 DB_PASSWORD = "your-password"
 ```
-Or set the `DATABASE_URL` environment variable instead. Optional environment variables: `JWT_SECRET`, `GOOGLE_CLIENT_ID`.
+Or set the `DATABASE_URL` environment variable instead. Optional environment variables: `JWT_SECRET`, `GOOGLE_CLIENT_ID`, and `VITE_GOOGLE_CLIENT_ID` (set the two Google client ID variables to the same value; the `VITE_` variable is read when building the frontend).
 
 Start the server:
 ```powershell

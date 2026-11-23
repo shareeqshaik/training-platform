@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-const CLIENT_ID = "524566616253-gbujjrau57crtic9fcs8c4i67va6n8g7.apps.googleusercontent.com";
+const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "524566616253-gbujjrau57crtic9fcs8c4i67va6n8g7.apps.googleusercontent.com";
 export default function GoogleButton({ onCredential }) {
   const box = useRef(null);
   useEffect(() => {

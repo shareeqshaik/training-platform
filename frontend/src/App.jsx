@@ -8,6 +8,7 @@ export default function App() {
   const [tok, setTok] = useState(null); const [courses, setCourses] = useState([]);
   const [prog, setProg] = useState(null); const [cid, setCid] = useState(null); const [mod, setMod] = useState(null);
   const [mid, setMid] = useState(null); const [msg, setMsg] = useState(""); const [role, setRole] = useState(""); const [name, setName] = useState("");
+  const [authMode, setAuthMode] = useState("login");
   const call = async (path, method = "GET", body) => {
     const r = await fetch(API + path, { method, headers: { "Content-Type": "application/json", ...(tok && { Authorization: `Bearer ${tok}` }) },
       body: body && JSON.stringify(body) });
@@ -20,6 +21,11 @@ export default function App() {
   const signedIn = r => { setMsg(""); setRole(r.role); setName(r.name); setTok(r.token); };
   const login = async e => { e.preventDefault(); const f = new FormData(e.target);
     try { signedIn(await call("/auth/login", "POST", { email: f.get("email"), password: f.get("password") })); } catch (x) { setMsg(x.message); } };
+  const signup = async e => { e.preventDefault(); const f = new FormData(e.target);
+    try {
+      await call("/auth/register", "POST", { name: f.get("name"), email: f.get("email"), password: f.get("password") });
+      signedIn(await call("/auth/login", "POST", { email: f.get("email"), password: f.get("password") }));
+    } catch (x) { setMsg(x.message); } };
   const googleLogin = async credential => {
     try { signedIn(await call("/auth/google", "POST", { credential })); } catch (x) { setMsg(x.message); } };
   const logout = () => { setTok(null); setRole(""); setName(""); setCourses([]); setProg(null); setCid(null); setMod(null); setMid(null); setMsg(""); };
@@ -27,9 +33,19 @@ export default function App() {
     try { const c = await call(`/courses/${cid}/certificate`, "POST");
       if (pdf) window.location.href = `${API}/certificates/${c.number}/pdf`; else window.open(`${API}/certificates/${c.number}`);
     } catch (x) { setMsg(x.message); } };
-  if (!tok) return (<form onSubmit={login}><h1>Login</h1><input name="email" placeholder="email" />
-    <input name="password" type="password" placeholder="password" /><button>Sign in</button>
-    <p>or</p><GoogleButton onCredential={googleLogin} /><p>{msg}</p></form>);
+  if (!tok) return (<form onSubmit={authMode === "login" ? login : signup}>
+    <h1>{authMode === "login" ? "Login" : "Create account"}</h1>
+    {authMode === "signup" && <input name="name" placeholder="Name" autoComplete="name" required />}
+    <input name="email" type="email" placeholder="Email" autoComplete="email" required />
+    <input name="password" type="password" placeholder="Password" autoComplete={authMode === "login" ? "current-password" : "new-password"} minLength={authMode === "signup" ? 6 : undefined} required />
+    <button>{authMode === "login" ? "Sign in" : "Sign up"}</button>
+    <p>{authMode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
+      <button type="button" className="auth-switch" onClick={() => { setAuthMode(authMode === "login" ? "signup" : "login"); setMsg(""); }}>
+        {authMode === "login" ? "Sign up" : "Sign in"}
+      </button>
+    </p>
+    <p>or</p><GoogleButton onCredential={googleLogin} />{msg && <p role="alert">{msg}</p>}
+  </form>);
   return (<div>
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
       <span>Signed in as <b>{name}</b> ({role})</span><button onClick={logout}>Logout</button>
